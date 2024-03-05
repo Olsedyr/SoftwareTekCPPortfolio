@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WeatherDataRepositoryKøbenhavn extends JpaRepository<WeatherDataKøbenhavn, Long> {
 
-    // Add custom methods for querying weather data as needed
+    // find the newest row in the database by id
+    WeatherDataKøbenhavn findTopByOrderByIdDesc();
+
 
 }
