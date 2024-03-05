@@ -1,5 +1,6 @@
 package com.example.weatherapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.springframework.web.bind.annotation.RestController;
@@ -7,6 +8,7 @@ import java.time.LocalDateTime;
 
 
 @RestController
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table
 public class WeatherDataKøbenhavn {
