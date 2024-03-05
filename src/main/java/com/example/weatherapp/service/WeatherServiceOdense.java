@@ -3,6 +3,7 @@ package com.example.weatherapp.service;
 import com.example.weatherapp.entity.WeatherDataOdense;
 import com.example.weatherapp.repository.WeatherDataRepositoryOdense;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,10 +23,17 @@ public class WeatherServiceOdense {
     private RestTemplate restTemplate;
 
     public void saveWeatherDataFromApi() {
+        // method to save weather data that is fetched from the API
+
         ResponseEntity<String> weatherApiResponse = fetchWeatherDataFromApi();
         if (weatherApiResponse != null && weatherApiResponse.getStatusCode() == HttpStatus.OK) {
+
             String weatherDataString = weatherApiResponse.getBody();
+            System.out.println("API Response as string: " + weatherDataString);
+
             WeatherDataOdense weatherData = parseWeatherDataFromApiResponse(weatherDataString);
+            System.out.println("API response parsed: " + weatherData);
+
             if (weatherData != null) {
                 weatherDataRepository.save(weatherData);
             }
@@ -33,6 +41,8 @@ public class WeatherServiceOdense {
     }
 
     public ResponseEntity<String> fetchWeatherDataFromApi() {
+        // method to fetch API for weather data
+
         try {
             ResponseEntity<String> response = restTemplate.getForEntity(WEATHER_API_URL, String.class);
             return response;
@@ -43,13 +53,22 @@ public class WeatherServiceOdense {
     }
 
     private WeatherDataOdense parseWeatherDataFromApiResponse(String weatherDataString) {
+        // method to parse the API response from JSON to "weatherData" Java Object
+
         try {
+
             ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            WeatherDataOdense weatherData = objectMapper.readValue(weatherDataString, WeatherDataOdense.class);
+            JsonNode rootNode = objectMapper.readTree(weatherDataString);
+
+            // extract "temperature_2m" value from the "current" object
+            JsonNode currentTemperatureNode = rootNode.path("current").path("temperature_2m");
+            Double temperature = currentTemperatureNode.isMissingNode() ? null : currentTemperatureNode.asDouble();
+
+            WeatherDataOdense weatherData = new WeatherDataOdense();
+            weatherData.setTemperature(temperature);
+
             return weatherData;
         } catch (Exception e) {
-            // Handle parsing error or log exception
             e.printStackTrace();
             return null;
         }

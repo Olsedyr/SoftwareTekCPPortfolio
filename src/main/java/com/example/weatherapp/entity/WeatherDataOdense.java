@@ -1,5 +1,6 @@
 package com.example.weatherapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
@@ -21,16 +22,23 @@ public class WeatherDataOdense {
             generator = "user_sequence"
     )
     private Long id;
-    private Double temperature_2m;
+    @JsonProperty("temperature_2m")
+    private Double temperature;
+
 
     private LocalDateTime time;
+
+    @PrePersist
+    protected void onCreate() {
+        time = LocalDateTime.now();
+    }
 
     public WeatherDataOdense() {
     }
 
-    public WeatherDataOdense(Long id, Double temperature_2m, LocalDateTime localDateTime) {
+    public WeatherDataOdense(Long id, Double temperature, LocalDateTime localDateTime) {
         this.id = id;
-        this.temperature_2m = temperature_2m;
+        this.temperature = temperature;
         this.time = localDateTime;
     }
 
@@ -45,11 +53,11 @@ public class WeatherDataOdense {
 
 
     public Double getTemperature() {
-        return temperature_2m;
+        return temperature;
     }
 
-    public void setTemperature(Double temperature_2m) {
-        this.temperature_2m = temperature_2m;
+    public void setTemperature(Double temperature) {
+        this.temperature = temperature;
     }
 
     public LocalDateTime getTime() {

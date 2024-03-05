@@ -1,5 +1,6 @@
 package com.example.weatherapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table
 public class WeatherDataKøbenhavn {
+
 
     @Id
     @SequenceGenerator(
@@ -21,17 +23,24 @@ public class WeatherDataKøbenhavn {
             generator = "user_sequence"
     )
     private Long id;
-    private String temperature;
+    @JsonProperty("temperature_2m")
+    private Double temperature;
 
-    private LocalDateTime localDateTime;
+
+    private LocalDateTime time;
+
+    @PrePersist
+    protected void onCreate() {
+        time = LocalDateTime.now();
+    }
 
     public WeatherDataKøbenhavn() {
     }
 
-    public WeatherDataKøbenhavn(Long id, String temperature, LocalDateTime localDateTime) {
+    public WeatherDataKøbenhavn(Long id, Double temperature, LocalDateTime localDateTime) {
         this.id = id;
         this.temperature = temperature;
-        this.localDateTime = localDateTime;
+        this.time = localDateTime;
     }
 
 
@@ -44,11 +53,20 @@ public class WeatherDataKøbenhavn {
     }
 
 
-    public String getTemperature() {
+    public Double getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(String temperature) {
+    public void setTemperature(Double temperature) {
         this.temperature = temperature;
+    }
+
+    public LocalDateTime getTime() {
+        time = LocalDateTime.now();
+        return time;
+    }
+
+    public void setTime(LocalDateTime time) {
+        this.time = time;
     }
 }
