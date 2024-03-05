@@ -21,19 +21,17 @@ public class WeatherDataOdense {
             generator = "user_sequence"
     )
     private Long id;
-    private String temperature;
-    private String condition;
+    private Double temperature_2m;
 
-    private LocalDateTime localDateTime;
+    private LocalDateTime time;
 
     public WeatherDataOdense() {
     }
 
-    public WeatherDataOdense(Long id, String temperature, String condition, LocalDateTime localDateTime) {
+    public WeatherDataOdense(Long id, Double temperature_2m, LocalDateTime localDateTime) {
         this.id = id;
-        this.temperature = temperature;
-        this.condition = condition;
-        this.localDateTime = localDateTime;
+        this.temperature_2m = temperature_2m;
+        this.time = localDateTime;
     }
 
 
@@ -46,19 +44,21 @@ public class WeatherDataOdense {
     }
 
 
-    public String getTemperature() {
-        return temperature;
+    public Double getTemperature() {
+        return temperature_2m;
     }
 
-    public void setTemperature(String temperature) {
-        this.temperature = temperature;
+    public void setTemperature(Double temperature_2m) {
+        this.temperature_2m = temperature_2m;
     }
 
-    public String getCondition() {
-        return condition;
+    public LocalDateTime getTime() {
+        time = LocalDateTime.now();
+        return time;
     }
 
-    public void setCondition(String condition) {
-        this.condition = condition;
+    public void setTime(LocalDateTime time) {
+        this.time = time;
     }
+
 }
