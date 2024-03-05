@@ -9,7 +9,7 @@ const MainSite = () => {
     return (
         <div className="container">
             <div className="header">
-                <h1>Weather Checker</h1>
+                <h1>API Weather Checker</h1>
                 <br/>
             </div>
             <div className="dashboard">
