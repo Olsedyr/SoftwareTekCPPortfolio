@@ -22,17 +22,15 @@ public class WeatherDataKøbenhavn {
     )
     private Long id;
     private String temperature;
-    private String condition;
 
     private LocalDateTime localDateTime;
 
     public WeatherDataKøbenhavn() {
     }
 
-    public WeatherDataKøbenhavn(Long id, String temperature, String condition, LocalDateTime localDateTime) {
+    public WeatherDataKøbenhavn(Long id, String temperature, LocalDateTime localDateTime) {
         this.id = id;
         this.temperature = temperature;
-        this.condition = condition;
         this.localDateTime = localDateTime;
     }
 
@@ -52,13 +50,5 @@ public class WeatherDataKøbenhavn {
 
     public void setTemperature(String temperature) {
         this.temperature = temperature;
-    }
-
-    public String getCondition() {
-        return condition;
-    }
-
-    public void setCondition(String condition) {
-        this.condition = condition;
     }
 }

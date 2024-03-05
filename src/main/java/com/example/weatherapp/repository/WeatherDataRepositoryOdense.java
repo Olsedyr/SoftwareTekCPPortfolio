@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WeatherDataRepositoryOdense extends JpaRepository<WeatherDataOdense, Long> {
 
+    WeatherDataOdense findTopByOrderByIdDesc();
+
     // Add custom methods for querying weather data as needed
 
 }
