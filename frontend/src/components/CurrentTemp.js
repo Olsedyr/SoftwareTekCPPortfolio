@@ -28,6 +28,8 @@ const CurrentTemp = () => {
             fetchData();
         }, 900000); // Fetch data every 15 minutes
 
+        fetchData();
+
         // Clear the interval when the component unmounts
         return () => clearInterval(intervalId);
     }, []); // Empty dependency array to run effect only once on component mount
