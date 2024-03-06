@@ -8,12 +8,12 @@ const CurrentTemp = () => {
     const fetchData = async () => {
         try {
             // Fetch temperature data from backend API
-            const responseOdense = await axios.get("api/weather/odense/latest");
-            const responseKøbenhavn = await axios.get("api/weather/københavn/latest");
+            const responseOdense = await axios.get("http://localhost:8080/api/weather/odense/latest");
+            const responseKøbenhavn = await axios.get("http://localhost:8080/api/weather/københavn/latest");
 
             // Extract temperature values from response data
-            const { weatherdata : odenseTemperature } = responseOdense.data;
-            const { weatherdata : cphTemperature } = responseKøbenhavn.data;
+            const { temperature_2m : odenseTemperature } = responseOdense.data;
+            const { temperature_2m : cphTemperature } = responseKøbenhavn.data;
 
             // Update state with temperature values
             setOdenseTemp(odenseTemperature);
@@ -26,7 +26,7 @@ const CurrentTemp = () => {
     useEffect(() => {
         const intervalId = setInterval(() => {
             fetchData();
-        }, 5000); // Fetch data every 5 seconds
+        }, 900000); // Fetch data every 15 minutes
 
         // Clear the interval when the component unmounts
         return () => clearInterval(intervalId);
