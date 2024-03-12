@@ -4,6 +4,8 @@ import axios from 'axios';
 const CurrentTemp = () => {
     const [odenseTemp, setOdenseTemp] = useState(null);
     const [cphTemp, setCphTemp] = useState(null);
+    const [cphTempDate, setCphTempDate] = useState(null);
+    const [odenseTempDate, setOdenseTempDate] = useState(null);
 
     const fetchData = async () => {
         try {
@@ -15,9 +17,15 @@ const CurrentTemp = () => {
             const { temperature_2m : odenseTemperature } = responseOdense.data;
             const { temperature_2m : cphTemperature } = responseKøbenhavn.data;
 
+            const { time : odenseTemperatureDate } = responseOdense.data;
+            const { time : cphTemperatureDate } = responseKøbenhavn.data;
+
             // Update state with temperature values
             setOdenseTemp(odenseTemperature);
             setCphTemp(cphTemperature);
+
+            setCphTempDate(cphTemperatureDate)
+            setOdenseTempDate(odenseTemperatureDate)
         } catch (error) {
             console.error('Error fetching temperature data:', error);
         }
@@ -39,9 +47,19 @@ const CurrentTemp = () => {
             <h2>Temperature for Odense and Copenhagen</h2>
             <div className="box-content">
                 <br/>
-                <p><strong>OdenseTemp:</strong> {odenseTemp !== null ? `${odenseTemp} °C` : 'Loading...'}</p>
+                <p>
+                    <strong>OdenseTemp:  </strong>
+                    {odenseTemp !== null ? `${odenseTemp} °C` : ''}
+                    <br/>
+                    {odenseTempDate !== null ? `${new Date(odenseTempDate).toLocaleString('en-DK',{ hour12: false })} ` : ''}
+                </p>
                 <br/>
-                <p><strong>CPHTemp:</strong> {cphTemp !== null ? `${cphTemp} °C` : 'Loading...'}</p>
+                <p>
+                    <strong>CphTemp:  </strong>
+                    {cphTemp !== null ? `${cphTemp} °C` : ''}
+                    <br/>
+                    {cphTempDate !== null ? `${new Date(cphTempDate).toLocaleString('en-DK', { hour12: false })} ` : ''}
+                </p>
             </div>
         </div>
     );
