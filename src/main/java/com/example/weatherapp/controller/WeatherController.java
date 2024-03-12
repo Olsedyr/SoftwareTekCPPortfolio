@@ -1,8 +1,10 @@
 package com.example.weatherapp.controller;
 
 import com.example.weatherapp.entity.WeatherDataKøbenhavn;
+import com.example.weatherapp.entity.WeatherDataKøbenhavnAverage;
 import com.example.weatherapp.entity.WeatherDataOdense;
 import com.example.weatherapp.service.WeatherServiceKøbenhavn;
+import com.example.weatherapp.service.WeatherServiceKøbenhavnAverage;
 import com.example.weatherapp.service.WeatherServiceOdense;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,9 @@ public class WeatherController {
 
     @Autowired
     private WeatherServiceKøbenhavn weatherServiceKBH;
+
+    @Autowired
+    private WeatherServiceKøbenhavnAverage weatherServiceKøbenhavnAverage;
 
     @GetMapping("/odense/latest")
     public ResponseEntity<WeatherDataOdense> getLatestWeatherDataOdense() {
@@ -58,5 +63,22 @@ public class WeatherController {
         }
     }
 
+    @GetMapping("/københavn/average")
+    public ResponseEntity<WeatherDataKøbenhavnAverage> getAverageWeatherDataKøbenhavn() {
+        // controller for getting latest weather data from database
+
+        // it fetches the API for new data and saves it to the database
+        weatherServiceKøbenhavnAverage.saveWeatherDataFromApi();
+
+        // then the newest weather data gets requested and returned as "ResponseEntity.ok"
+        WeatherDataKøbenhavnAverage weatherData = weatherServiceKøbenhavnAverage.getNewestWeatherData();
+
+        if (weatherData != null) {
+            System.out.println("WeatherData in controller: " + weatherData);
+            return ResponseEntity.ok(weatherData);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 }
