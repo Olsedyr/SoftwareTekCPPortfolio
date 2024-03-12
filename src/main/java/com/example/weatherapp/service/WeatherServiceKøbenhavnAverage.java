@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class WeatherServiceKøbenhavnAverage {
 
-    private static final String WEATHER_API_URL = "https://api.open-meteo.com/v1/forecast?latitude=55.6761&longitude=12.5683&daily=temperature_2m_mean&start_date=2024-02-26&end_date=2024-02-26&timezone=auto";
+    private static final String WEATHER_API_URL = "https://api.open-meteo.com/v1/forecast?latitude=55.6759&longitude=12.5655&daily=temperature_2m_mean&past_days=7&forecast_days=0";
 
     @Autowired
     private WeatherDataRepositoryKøbenhavnAverage weatherDataRepository;
@@ -56,16 +56,29 @@ public class WeatherServiceKøbenhavnAverage {
         // method to parse the API response from JSON to "weatherData" Java Object
 
         try {
-
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(weatherDataString);
 
-            // extract "temperature_2m_mean" value from the "current" object
-            JsonNode currentTemperatureNode = rootNode.path("daily").path("temperature_2m_mean");
-            Double temperature = currentTemperatureNode.isMissingNode() ? null : currentTemperatureNode.asDouble();
+            // extract temperatures from the array
+            JsonNode temperatureArrayNode = rootNode.path("daily").path("temperature_2m_mean");
+
+            // calculate the sum of temperatures and count the number of temperatures
+            double sum = 0.0;
+            int count = 0;
+            for (JsonNode temperatureNode : temperatureArrayNode) {
+                double temperature = temperatureNode.isMissingNode() ? 0.0 : temperatureNode.asDouble();
+                sum += temperature;
+                count++;
+            }
+
+            // calculate the weekly average temperature
+            double weeklyAverage = count > 0 ? sum / count : 0.0;
+
+            // round the weekly average temperature to two decimal places
+            double roundedAverage = Math.round(weeklyAverage * 100.0) / 100.0;
 
             WeatherDataKøbenhavnAverage weatherData = new WeatherDataKøbenhavnAverage();
-            weatherData.setAverageTemperatureKøbenhavn(temperature);
+            weatherData.setAverageTemperatureKøbenhavn(roundedAverage);
 
             return weatherData;
         } catch (Exception e) {
