@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import './MainSite.css';
+import TemperatureCard from "./components/TemperatureCard";
+import AverageTemperatureCard from "./components/AverageTemperatureCard";
+import TemperatureComparisonCard from "./components/TemperatureComparisonCard";
+
 
 const MainSite = () => {
     const [odenseTemp, setOdenseTemp] = useState(null);
@@ -57,43 +61,11 @@ const MainSite = () => {
                 <br/>
             </div>
             <div className="dashboard">
-                <div className="info-box">
-                    <h2>Temperature for Odense and Copenhagen</h2>
-                    <div className="box-content">
-                        <br/>
-                        <p>
-                            <strong>OdenseTemp: </strong>
-                            {odenseTemp !== null ? `${odenseTemp} °C` : ''}
-                            <br/>
-                            {odenseTempDate !== null ? `${new Date(odenseTempDate).toLocaleString('en-DK', { hour12: false })} ` : ''}
-                        </p>
-                        <br/>
-                        <p>
-                            <strong>CphTemp: </strong>
-                            {cphTemp !== null ? `${cphTemp} °C` : ''}
-                            <br/>
-                            {cphTempDate !== null ? `${new Date(cphTempDate).toLocaleString('en-DK', { hour12: false })} ` : ''}
-                        </p>
-                    </div>
-                </div>
-                <div className="info-box">
-                    <h2>Average temperature for Odense and Copenhagen (Last 7 days)</h2>
-                    <div className="box-content">
-                        <br/>
-                        <p><strong>OdenseTemp Average: </strong>{odenseTempAvg !== null ? `${odenseTempAvg} °C` : 'Loading...'}</p>
-                        <br/>
-                        <p><strong>CPHTemp Average: </strong>{cphTempAvg !== null ? `${cphTempAvg} °C` : 'Loading...'}</p>
-                    </div>
-                </div>
-                <div className="info-box">
-                    <h2>Temperature Comparison (Odense/CPH)</h2>
-                    <div className="box-content">
-                        <br/>
-                        <p><strong>Current difference: </strong>{tempDifference !== null ? `${tempDifference} °C` : 'Loading...'} </p>
-                        <br/>
-                        <p><strong>Average difference: </strong>{tempDifferenceAvg !== null ? `${tempDifferenceAvg} °C` : 'Loading...'} </p>
-                    </div>
-                </div>
+                <TemperatureCard location="Odense" temperature={odenseTemp} time={odenseTempDate} />
+                <TemperatureCard location="Copenhagen" temperature={cphTemp} time={cphTempDate} />
+                <AverageTemperatureCard location="Odense" temperature={odenseTempAvg} />
+                <AverageTemperatureCard location="Copenhagen" temperature={cphTempAvg} />
+                <TemperatureComparisonCard title="Temperature Comparison (Odense/CPH)" currentDifference={tempDifference} averageDifference={tempDifferenceAvg} />
             </div>
         </div>
     );
